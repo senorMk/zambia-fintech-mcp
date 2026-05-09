@@ -1,0 +1,35 @@
+{
+  "name": "zambia-fintech-mcp",
+  "version": "0.1.0",
+  "description": "MCP server exposing Zambian fintech utilities: BOZ exchange rates, ZESCO units calculator, and mobile money fee calculators.",
+  "type": "module",
+  "bin": {
+    "zambia-fintech-mcp": "dist/index.js"
+  },
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsx src/index.ts"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "zambia",
+    "fintech",
+    "boz",
+    "zesco",
+    "mobile-money"
+  ],
+  "author": "Penjani Mkandawire",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.4",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.0"
+  }
+}
