@@ -1,0 +1,60 @@
+{
+  "provider": "MTN",
+  "effectiveFrom": "2026-01-01",
+  "currency": "ZMW",
+  "source": {
+    "name": "ZamCalc — MTN MoMo Fees Zambia 2026",
+    "url": "https://zamcalc.com/blog/mtn-momo-fees-zambia-2026"
+  },
+  "operations": {
+    "send_same_network": {
+      "levyApplies": true,
+      "tiers": [
+        { "upTo": 150,    "operatorFee": 0.42, "levy": 0.32 },
+        { "upTo": 300,    "operatorFee": 0.90, "levy": 0.40 },
+        { "upTo": 500,    "operatorFee": 0.80, "levy": 0.80 },
+        { "upTo": 1000,   "operatorFee": 1.00, "levy": 2.00 },
+        { "upTo": 3000,   "operatorFee": 2.20, "levy": 4.00 },
+        { "upTo": 5000,   "operatorFee": 3.00, "levy": 7.50 },
+        { "upTo": 10000,  "operatorFee": 4.00, "levy": 8.00 }
+      ]
+    },
+    "send_cross_network": {
+      "levyApplies": true,
+      "tiers": [
+        { "upTo": 150,    "operatorFee": 2.50,  "levy": 0.32 },
+        { "upTo": 300,    "operatorFee": 5.00,  "levy": 0.40 },
+        { "upTo": 500,    "operatorFee": 8.00,  "levy": 0.80 },
+        { "upTo": 1000,   "operatorFee": 15.00, "levy": 2.00 },
+        { "upTo": 3000,   "operatorFee": 20.00, "levy": 4.00 },
+        { "upTo": 5000,   "operatorFee": 30.00, "levy": 7.50 },
+        { "upTo": 10000,  "operatorFee": 50.00, "levy": 8.00 }
+      ]
+    },
+    "send_to_bank": {
+      "levyApplies": false,
+      "tiers": [
+        { "upTo": 150,    "operatorFee": 2.50,  "levy": 0 },
+        { "upTo": 300,    "operatorFee": 5.00,  "levy": 0 },
+        { "upTo": 500,    "operatorFee": 8.00,  "levy": 0 },
+        { "upTo": 1000,   "operatorFee": 15.00, "levy": 0 },
+        { "upTo": 3000,   "operatorFee": 20.00, "levy": 0 },
+        { "upTo": 5000,   "operatorFee": 30.00, "levy": 0 },
+        { "upTo": 10000,  "operatorFee": 50.00, "levy": 0 }
+      ]
+    },
+    "withdraw_at_agent": {
+      "levyApplies": false,
+      "tiers": [
+        { "upTo": 150,    "operatorFee": 2.50,  "levy": 0 },
+        { "upTo": 300,    "operatorFee": 5.00,  "levy": 0 },
+        { "upTo": 500,    "operatorFee": 10.00, "levy": 0 },
+        { "upTo": 1000,   "operatorFee": 20.00, "levy": 0 },
+        { "upTo": 2000,   "operatorFee": 30.00, "levy": 0 },
+        { "upTo": 3000,   "operatorFee": 40.00, "levy": 0 },
+        { "upTo": 5000,   "operatorFee": 55.00, "levy": 0 },
+        { "upTo": 10000,  "operatorFee": 60.00, "levy": 0 }
+      ]
+    }
+  }
+}

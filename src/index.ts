@@ -4,7 +4,7 @@ import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import { z } from "zod";
 import { calculateUnits } from "./tools/zesco-units.js";
 import { getZmwRate, listSupportedQuotes } from "./tools/boz-rates.js";
-import { quoteFee } from "./tools/momo-fees.js";
+import { quoteFee, listOperations, listProviders } from "./tools/momo-fees.js";
 import {
   PAYE_BANDS_2024,
   grossToNet,
@@ -52,18 +52,46 @@ server.tool(
 
 server.tool(
   "momo_quote_fee",
-  "Quote the fee for an MTN MoMo or Airtel Money operation in ZMW. Fee tiers are illustrative — verify with the provider before production use.",
+  "Quote the fee for a Zambian mobile money operation in ZMW. Returns operator fee and government levy as separate components, plus the schedule's effective date and source URL. Use momo_list_operations to discover what operations a given provider supports.",
   {
-    provider: z.enum(["MTN", "Airtel"]),
-    operation: z.enum(["send_to_user", "withdraw_at_agent"]),
+    provider: z.enum(["MTN", "Airtel", "Zamtel"]),
+    operation: z.string(),
     amountKwacha: z.number().positive(),
+    asOf: z
+      .string()
+      .regex(/^\d{4}-\d{2}-\d{2}$/)
+      .optional(),
   },
-  async ({ provider, operation, amountKwacha }) => {
-    const fee = quoteFee(provider, operation, amountKwacha);
+  async ({ provider, operation, amountKwacha, asOf }) => {
+    const fee = quoteFee(provider, operation, amountKwacha, asOf);
     return {
       content: [{ type: "text", text: JSON.stringify(fee, null, 2) }],
     };
   },
+);
+
+server.tool(
+  "momo_list_operations",
+  "List the operations defined in the active fee schedule for a provider (e.g. send_same_network, send_cross_network, send_to_bank, withdraw_at_agent).",
+  {
+    provider: z.enum(["MTN", "Airtel", "Zamtel"]),
+    asOf: z
+      .string()
+      .regex(/^\d{4}-\d{2}-\d{2}$/)
+      .optional(),
+  },
+  async ({ provider, asOf }) => ({
+    content: [{ type: "text", text: listOperations(provider, asOf).join(", ") }],
+  }),
+);
+
+server.tool(
+  "momo_list_providers",
+  "List the mobile money providers with at least one fee schedule loaded.",
+  {},
+  async () => ({
+    content: [{ type: "text", text: listProviders().join(", ") }],
+  }),
 );
 
 server.tool(

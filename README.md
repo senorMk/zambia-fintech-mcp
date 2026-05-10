@@ -22,7 +22,9 @@ breakdowns, NAPSA contributions, fee tiers, the lot.
 | `zesco_calculate_units` | Returns kWh units for a kwacha purchase amount, applying T1/T2/T3 residential bands |
 | `boz_exchange_rate` | ZMW → quote-currency indicative rate (stubbed in v0.1) |
 | `boz_list_supported_quotes` | Lists currencies the rate tool knows about |
-| `momo_quote_fee` | Quotes MTN / Airtel send & withdraw fees by amount tier |
+| `momo_quote_fee` | Quotes mobile money fees with operator/levy split, sourced from per-provider JSON schedules |
+| `momo_list_operations` | Lists the operations defined for a given provider's active schedule |
+| `momo_list_providers` | Lists providers with at least one fee schedule loaded |
 | `paye_gross_to_net` | Monthly PAYE + NAPSA → net take-home, with per-band breakdown |
 | `paye_net_to_gross` | Reverse: solve the gross required to land at a desired net |
 | `paye_from_allowances` | Payslip from basic + housing + transport + other taxable |
@@ -55,14 +57,22 @@ Add to your MCP config:
 | Tool | Status |
 | --- | --- |
 | ZESCO units | **Real.** Logic ported from [zesco-units-calculator](https://github.com/senorMk/zesco-units-calculator). |
-| Mobile money fees | **Stub tables.** Tier shapes are accurate; exact fee values are illustrative — verify with provider before production. |
+| Mobile money fees | **Real (MTN 2026).** Tables sourced from ZamCalc; stored as versioned JSON schedules in `src/data/`. Operator fee and government levy tracked separately; levy-exempt operations (withdrawals, bank transfers) handled correctly. |
 | BOZ rates | **Stub.** Returns plausible values. Roadmap: scrape the BOZ daily rate sheet PDF or wire to a published JSON feed. |
 | PAYE / NAPSA | **Real, but pinned to 2024 bands.** Update `PAYE_BANDS_2024` and `NAPSA_CEILING_GROSS` after each national budget. |
+
+## Adding a fee schedule
+
+Drop a JSON file into `src/data/` matching the shape of `mtn-2026.json`:
+provider, `effectiveFrom` date, source attribution, and per-operation tier
+arrays with `operatorFee` and `levy` per tier. The server validates each file
+with zod at startup and picks the most recent schedule on or before the
+caller's `asOf` date (or today). Annual budget refresh = one new JSON file.
 
 ## Roadmap
 
 - [ ] Live BOZ daily rate sheet ingestion
-- [ ] Confirmed MTN / Airtel published tariffs
+- [ ] Airtel & Zamtel 2026 fee schedules
 - [ ] LuSE ticker tool
 - [ ] Annual budget auto-update for PAYE bands
 - [ ] Loan affordability calculator (NAPSA / pension contribution aware)
