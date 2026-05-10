@@ -1,16 +1,19 @@
 # zambia-fintech-mcp
 
 A Model Context Protocol (MCP) server that gives AI assistants access to
-Zambia-specific financial utilities — exchange rates, ZESCO prepaid unit
-calculations, and mobile money fee quoting.
+Zambia-specific financial utilities — PAYE & NAPSA payroll calculations,
+exchange rates, ZESCO prepaid unit calculations, and mobile money fee quoting.
 
 Built so you can ask Claude / Cursor / any MCP-aware client things like:
 
+> *"If I want a net take-home of K10,000, what gross do I need to negotiate?"*
+> *"Break down PAYE on a K15,000 gross with K3k housing and K2k transport."*
 > *"How many ZESCO units do I get for K200?"*
 > *"What's the MTN fee on sending K1,500 to another user?"*
 > *"What's today's ZMW/USD rate?"*
 
-…and have it actually answer with structured data.
+…and have it actually answer with structured data — full per-band tax
+breakdowns, NAPSA contributions, fee tiers, the lot.
 
 ## Tools
 
