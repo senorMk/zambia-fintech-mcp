@@ -20,6 +20,10 @@ Built so you can ask Claude / Cursor / any MCP-aware client things like:
 | `boz_exchange_rate` | ZMW → quote-currency indicative rate (stubbed in v0.1) |
 | `boz_list_supported_quotes` | Lists currencies the rate tool knows about |
 | `momo_quote_fee` | Quotes MTN / Airtel send & withdraw fees by amount tier |
+| `paye_gross_to_net` | Monthly PAYE + NAPSA → net take-home, with per-band breakdown |
+| `paye_net_to_gross` | Reverse: solve the gross required to land at a desired net |
+| `paye_from_allowances` | Payslip from basic + housing + transport + other taxable |
+| `paye_bands` | Returns the PAYE bands in use so callers can audit assumptions |
 
 ## Install
 
@@ -50,14 +54,16 @@ Add to your MCP config:
 | ZESCO units | **Real.** Logic ported from [zesco-units-calculator](https://github.com/senorMk/zesco-units-calculator). |
 | Mobile money fees | **Stub tables.** Tier shapes are accurate; exact fee values are illustrative — verify with provider before production. |
 | BOZ rates | **Stub.** Returns plausible values. Roadmap: scrape the BOZ daily rate sheet PDF or wire to a published JSON feed. |
+| PAYE / NAPSA | **Real, but pinned to 2024 bands.** Update `PAYE_BANDS_2024` and `NAPSA_CEILING_GROSS` after each national budget. |
 
 ## Roadmap
 
 - [ ] Live BOZ daily rate sheet ingestion
 - [ ] Confirmed MTN / Airtel published tariffs
 - [ ] LuSE ticker tool
-- [ ] PAYE / income tax calculator (ZRA bands)
+- [ ] Annual budget auto-update for PAYE bands
 - [ ] Loan affordability calculator (NAPSA / pension contribution aware)
+- [ ] Housing/transport allowance carve-out support
 
 ## License
 

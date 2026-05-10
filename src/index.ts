@@ -5,6 +5,12 @@ import { z } from "zod";
 import { calculateUnits } from "./tools/zesco-units.js";
 import { getZmwRate, listSupportedQuotes } from "./tools/boz-rates.js";
 import { quoteFee } from "./tools/momo-fees.js";
+import {
+  PAYE_BANDS_2024,
+  grossToNet,
+  netToGross,
+  payslipFromAllowances,
+} from "./tools/paye.js";
 
 const server = new McpServer({
   name: "zambia-fintech-mcp",
@@ -58,6 +64,56 @@ server.tool(
       content: [{ type: "text", text: JSON.stringify(fee, null, 2) }],
     };
   },
+);
+
+server.tool(
+  "paye_gross_to_net",
+  "Calculate Zambian monthly net pay from gross. Returns PAYE, NAPSA, and per-band tax breakdown. Uses 2024 ZRA bands — verify against latest budget.",
+  { grossKwacha: z.number().nonnegative() },
+  async ({ grossKwacha }) => ({
+    content: [
+      { type: "text", text: JSON.stringify(grossToNet(grossKwacha), null, 2) },
+    ],
+  }),
+);
+
+server.tool(
+  "paye_net_to_gross",
+  "Reverse-solve the gross monthly pay required to land at a desired net (after PAYE + NAPSA). Useful for offer negotiation and take-home targeting.",
+  { desiredNetKwacha: z.number().nonnegative() },
+  async ({ desiredNetKwacha }) => ({
+    content: [
+      {
+        type: "text",
+        text: JSON.stringify(netToGross(desiredNetKwacha), null, 2),
+      },
+    ],
+  }),
+);
+
+server.tool(
+  "paye_from_allowances",
+  "Build a payslip from a basic-plus-allowances structure (basic + housing + transport + other taxable). Returns the same PAYE/NAPSA breakdown plus component totals.",
+  {
+    basicKwacha: z.number().nonnegative(),
+    housingKwacha: z.number().nonnegative().optional(),
+    transportKwacha: z.number().nonnegative().optional(),
+    otherTaxableKwacha: z.number().nonnegative().optional(),
+  },
+  async (input) => ({
+    content: [
+      { type: "text", text: JSON.stringify(payslipFromAllowances(input), null, 2) },
+    ],
+  }),
+);
+
+server.tool(
+  "paye_bands",
+  "Return the PAYE bands the calculator is using, so callers can audit assumptions or compare against the current ZRA schedule.",
+  {},
+  async () => ({
+    content: [{ type: "text", text: JSON.stringify(PAYE_BANDS_2024, null, 2) }],
+  }),
 );
 
 async function main() {
